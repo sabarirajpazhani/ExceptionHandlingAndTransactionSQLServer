@@ -44,3 +44,16 @@ begin transaction
 	end
 
 select * from Product;
+
+
+--Types of Transactions in SQL Server
+create table  Customer(
+	CustomerID int Primary key,
+	CustomerCode varchar(10),
+	CustomerName varchar(50)
+);
+--1. Auto Commit Transaction Mode (default)
+insert into Customer values(1, 'CODE_1', 'David');
+--error
+insert into Customer values(1, 'CODE_2', 'John');
+
