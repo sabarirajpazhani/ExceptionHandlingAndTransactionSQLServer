@@ -175,3 +175,27 @@ end;
 
 spAddNum1Num2 200, 10;
 		
+
+-- Raise Error using RAISERROR statement in SQL Server
+create procedure spAddtwoNum
+	@Number1 int,
+	@Number2 int
+as
+begin
+	declare @Result int
+	set @Result = 0
+	begin try
+		if @Number2 = 1
+		raiserror('Number2 is not One',16,1)
+		set @Result = @Number1 + @Number2
+		print 'Result = ' + cast(@Result as varchar(30))
+	end try
+	begin catch 
+		print error_number()
+		print error_message()
+		print error_severity()
+		print error_state()
+	end catch
+end
+
+spAddtwoNum 100, 1;
