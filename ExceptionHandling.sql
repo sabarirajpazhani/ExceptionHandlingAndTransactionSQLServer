@@ -28,3 +28,19 @@ CREATE TABLE Product
 	update Product set Price = 350 where ProductID = 103
 	delete from Product where ProductID = 103
 commit transaction
+
+--ROLLBACK TRANSACTION and Understanding @@Error Global variable
+begin transaction
+	insert into Product values (106,'Product-6',600,35)
+	insert into Product values(107,'Product-7',700,40)
+
+	if(@@error > 0)
+	begin
+		rollback transaction
+	end
+	else
+	begin
+		commit transaction
+	end
+
+select * from Product;
