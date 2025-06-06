@@ -57,3 +57,21 @@ insert into Customer values(1, 'CODE_1', 'David');
 --error
 insert into Customer values(1, 'CODE_2', 'John');
 
+--2. Implicit Transaction Mode in SQL Server
+delete from customer;
+
+set implicit_transactions on
+
+insert into Customer values(1, 'CODE_1', 'David');
+insert into Customer values(2, 'CODE_2', 'John');
+
+commit transaction
+
+insert into Customer values(3, 'CODE_3', 'Pam')
+update Customer set CustomerName = 'John Dewey' where CustomerID = 2;
+
+select * from Customer ;
+
+rollback transaction
+
+select * from Customer;
