@@ -58,20 +58,42 @@ insert into Customer values(1, 'CODE_1', 'David');
 insert into Customer values(1, 'CODE_2', 'John');
 
 --2. Implicit Transaction Mode in SQL Server
-delete from customer;
-
+--------------------------
 set implicit_transactions on
 
 insert into Customer values(1, 'CODE_1', 'David');
 insert into Customer values(2, 'CODE_2', 'John');
 
 commit transaction
-
+---------------------------
 insert into Customer values(3, 'CODE_3', 'Pam')
 update Customer set CustomerName = 'John Dewey' where CustomerID = 2;
 
 select * from Customer ;
-
+-----------------------------
 rollback transaction
 
 select * from Customer;
+-----------------------------
+--3. Explicit Transaction Mode in sql server
+create procedure spAddCustomer
+	@CustomerID int,
+	@CustomerCode varchar(10),
+	@CustomerName varchar(30)
+as
+begin
+	begin transaction
+	insert into Customer values (@CustomerID,@CustomerCode,@CustomerName);
+	if (@@error > 0)
+	begin
+		rollback transaction
+	end
+	else 
+	begin
+		commit transaction
+	end
+end
+
+spAddCustomer 103, 'CODE_3','Alice'
+
+select * from Customer ;
