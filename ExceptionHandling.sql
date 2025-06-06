@@ -115,3 +115,20 @@ print @@trancount
 select * from Customer;
 
 
+--savepoint
+delete from Customer;
+
+begin transaction
+	save transaction savepoint1
+		insert into Customer values (1, 'CODE_1', 'Arun')
+		insert into Customer values (2, 'CODE_2', 'Balaji')
+	save transaction savepoint2
+		insert into Customer values (3, 'CODE_3', 'Charan')
+		insert into Customer values (4, 'CODE_4', 'Danush')
+	save transaction savepoint3
+		insert into Customer values (5, 'CODE_5', 'Elango')
+		insert into Customer values (6, 'CODE_6', 'Faizel')
+
+rollback transaction savepoint3;
+
+select * from Customer;	
