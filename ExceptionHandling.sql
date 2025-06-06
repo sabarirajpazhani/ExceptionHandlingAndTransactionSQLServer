@@ -148,3 +148,30 @@ begin transaction T1
 	commit transaction T2
 	rollback transaction savepoint2
 commit transaction T1;
+
+
+
+--------------------------------------------------------------------
+--Exception Handling
+--Exception Handling Using RAISERROR System Function in SQL Server
+Alter procedure spAddNum1Num2
+	@Number1 int,
+	@Number2 int
+as
+begin
+	set nocount on;
+	declare @Result int
+	if(@Number2 = 0)
+	begin
+		raiserror('Number2 must not be Zero',16,1);
+		return
+	end
+	else
+	begin
+		set @Result = @Number1 + @Number2
+		print 'Result = ' + cast(@Result as varchar(30))
+	end
+end;
+
+spAddNum1Num2 200, 10;
+		
