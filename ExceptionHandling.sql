@@ -97,3 +97,21 @@ end
 spAddCustomer 103, 'CODE_3','Alice'
 
 select * from Customer ;
+
+--Nested Transactions in SQL Server
+begin transaction T1
+	insert into Customer values (3, 'CODE_3','Arun')
+	insert into Customer values (4,'CODE_4','Balaji')
+
+	begin transaction T2
+		insert into Customer values (5,'CODE_5','Charan')
+		insert into Customer values (6, 'CODE_6','Dhinesh')
+		print @@trancount
+	commit transaction T2
+	print @@trancount
+commit transaction T1
+print @@trancount
+
+select * from Customer;
+
+
