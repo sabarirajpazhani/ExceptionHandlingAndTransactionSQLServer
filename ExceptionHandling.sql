@@ -132,3 +132,19 @@ begin transaction
 rollback transaction savepoint3;
 
 select * from Customer;	
+
+
+--savepint with nested transaction
+delete from Customer;
+
+begin transaction T1
+	save transaction savepoint1
+		insert into Customer values (1, 'CODE_1','Arun')
+		insert into Customer values (2, 'CODE_2','Balaji')
+	begin transaction T2
+	save transaction savepoint2
+		insert into Customer values (3, 'CODE_3','Charan')
+		insert into Customer values (4, 'CODE_4', 'Dhanush')
+	commit transaction T2
+	rollback transaction savepoint2
+commit transaction T1;
