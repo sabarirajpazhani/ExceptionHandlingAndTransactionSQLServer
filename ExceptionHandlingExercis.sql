@@ -92,7 +92,7 @@ begin catch
 	print 'Outter Catch '+ error_message()
 end catch
 
-/*RAISEERROR with Custom Message:
+/*5. RAISEERROR with Custom Message:
 Use RAISEERROR inside the CATCH block to throw a user-defined error with severity level 16 and log it.*/
 begin try
 	declare @nums1 int = 150, @nums2 int = 0, @Result2 int = 0
@@ -105,3 +105,24 @@ begin catch
 end catch
 
 select * from ErrorLog;
+
+
+/*6. Transaction Rollback on Error:
+Simulate a transaction with multiple inserts, then force an error. Use TRY...CATCH to roll back the transaction and print "Transaction rolled back due to error."*/
+BEGIN TRY
+    BEGIN TRANSACTION;
+
+    INSERT INTO Employee (EmpName, EmpEmail, EmpSalary, EmpPhone) 
+    VALUES ('Raj', 'Raj@gmail.com', 75000, '9987875678');
+
+    INSERT INTO Employee (EmpName, EmpEmail, EmpSalary, EmpPhone) 
+    VALUES (NULL, 'Ravi@gmail.com', 80000, '776765677');  -- This will cause error if EmpName is NOT NULL
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+
+    PRINT 'Error: ' + ERROR_MESSAGE();
+    PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS VARCHAR);
+END CATCH;
