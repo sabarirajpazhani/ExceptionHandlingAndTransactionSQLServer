@@ -4,8 +4,7 @@ create database ExceptionHandlingExercise;
 --use database 
 use ExceptionHandlingExercise;
 
-/*1. Basic TRY...CATCH Block:
-Write a script that inserts a record into a table and use a TRY...CATCH block to handle any errors.*/
+--create table
 create table Employee(
 	EmpID int identity(1,1) primary key,
 	EmpName varchar(80),
@@ -23,3 +22,14 @@ INSERT INTO Employee (EmpName, EmpEmail, EmpSalary, EmpPhone) VALUES
 
 select * from Employee;
 
+
+/*1. Basic TRY...CATCH Block:
+Write a script that inserts a record into a table and use a TRY...CATCH block to handle any errors.*/
+begin try
+	insert into Employee (EmpName,EmpEmail, EmpSalary, EmpPhone)
+	values
+	('Elango', 'Elango@gmail.com',85000, '9987875632');
+end try
+begin catch
+	print 'Error Occurred : ' + ERROR_MESSAGE()
+end catch
