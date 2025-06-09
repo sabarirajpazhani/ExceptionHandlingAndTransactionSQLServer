@@ -46,3 +46,35 @@ begin catch
 	print'Divide by Zero'
 	print error_number()
 end catch
+
+/*3. Log Error Details:
+Use ERROR_MESSAGE(), ERROR_LINE(), and ERROR_SEVERITY() inside a CATCH block to log complete error information into a separate ErrorLog table.*/
+create table ErrorLog(
+	ErrorMessage varchar(80),
+	ErrorLine int,
+	ErrorSeverity int,
+);
+
+drop table ErrorLog;
+
+begin try
+	declare @Num1 int = 100, @Num2 int = 0
+	declare @Result1 int = 0
+	set @Result1 = @Num1 /@Num2
+	print 'Result - ' + cast(@Result1 as varchar(30))
+	insert into Employee (EmpID, EmpName,EmpEmail, EmpSalary, EmpPhone) values
+	(6,'Faizal', 'Faizal@gmail.com',85000,'77656523566')
+	print 'Records are inserted Successfully'
+end try
+begin catch
+	declare @Message varchar(80) = error_message()
+	declare @Line int = error_line()
+	declare @severity int = error_severity()
+	insert into ErrorLog values
+	(@Message, @Line, @severity);
+end catch
+
+select * from ErrorLog;
+
+
+
