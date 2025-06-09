@@ -268,3 +268,90 @@ begin
 end
 
 spDivisorNotBeZero 120, 0;
+
+
+--A real-time example of using the try-catch implementation in SQL Server.
+--Stored procedure for product sales using TRY Catch Implementation in SQL Server
+-- Create Product table
+CREATE TABLE Product
+(
+ ProductId INT PRIMARY KEY,
+ Name VARCHAR(50),
+ Price INT,
+ QuantityAvailable INT
+)
+GO
+-- Populate the Product Table with some test data
+INSERT INTO Product VALUES(101, 'Laptop', 1234, 100)
+INSERT INTO Product VALUES(102, 'Desktop', 3456, 50)
+INSERT INTO Product VALUES(103, 'Tablet', 5678, 35)
+INSERT INTO Product VALUES(104, 'Mobile', 7890, 25)
+GO
+
+-- Create ProductSales table
+CREATE TABLE ProductSales
+(
+ ProductSalesId INT PRIMARY KEY,
+ ProductId INT,
+ QuantitySold INT
+) 
+GO
+
+-- Populate the ProductSales Table with some test data
+INSERT INTO ProductSales VALUES(1, 101, 5)
+INSERT INTO ProductSales VALUES(2, 102, 7)
+INSERT INTO ProductSales VALUES(3, 103, 5)
+INSERT INTO ProductSales VALUES(4, 104, 7)
+Go
+
+select * from Product;
+select * from ProductSales;
+
+--answer
+create procedure spSellProduct
+	@ProductId int,
+	@QuantityToSale int
+as
+begin
+	declare @AvailableQuantity int
+	select @AvailableQuantity = QuantityAvailable from Product
+	where ProductId = @ProductId
+
+	if(@AvailableQuantity < @QuantityToSale)
+	begin
+		raiserror('Enough Stock is not Available',16,1)
+	end
+
+	else
+	begin
+		begin try
+			begin transaction 
+			update Product
+			set QuantityAvailable  = @AvailableQuantity - @QuantityToSale
+			where ProductId = @ProductId
+
+			declare @MaxProductSalesID int
+			select @MaxProductSalesID = case
+				when Max(ProductSalesId) is null then 0
+				else Max(ProductSalesId)
+				end
+			from ProductSales
+
+			set @MaxProductSalesID = @MaxProductSalesID + 1
+
+			insert into ProductSales values
+			(@MaxProductSalesID, @ProductId, @QuantityToSale)
+
+			commit transaction
+		end try
+		begin catch
+			print error_number()
+			print error_message()
+			print error_severity()
+			print error_State()
+			print error_Line()
+		end catch
+	end
+end
+
+spSellProduct 104, 25;
