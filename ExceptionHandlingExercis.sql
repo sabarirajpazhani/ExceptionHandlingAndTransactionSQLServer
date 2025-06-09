@@ -176,3 +176,19 @@ if @error<> 0
 print 'Error occurred in the code - ' + cast(@error as varchar(90))
 else
 print 'Inserted Successfully'
+
+/*10. Custom Error with THROW:
+Write a query using THROW 50001, 'Custom error occurred', 1 to manually raise an exception and handle it.*/
+begin 
+	declare @n1 int = 90, @n2 int = 0, @Result4 int =0
+	begin try
+		set @Result4 = @n1/@n2
+		if @@error > 0
+			throw 50001, 'Divison must not be Zero', 1
+		else
+			print 'Successfully Divided'
+	end try
+	begin catch
+		print 'Error - ' + error_message()
+	end catch
+end
