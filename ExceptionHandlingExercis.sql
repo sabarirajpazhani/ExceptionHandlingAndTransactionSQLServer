@@ -126,3 +126,22 @@ BEGIN CATCH
     PRINT 'Error: ' + ERROR_MESSAGE();
     PRINT 'Error Number: ' + CAST(ERROR_NUMBER() AS VARCHAR);
 END CATCH;
+
+/*7. Stored Procedure with Exception Handling:
+Create a stored procedure that performs insert/update and includes error handling using TRY...CATCH.*/
+create procedure spInsert
+	@EmpName varchar(80) ,
+	@EmpEmail varchar(80),
+	@EmpSalary int,
+	@EmpPhone varchar(20)
+as
+begin
+	begin try
+		insert into Employee values
+		(@EmpName,@EmpEmail,@EmpSalary,@EmpPhone)
+	end try
+	begin catch
+		Print 'Error ' + error_message()
+	end catch
+end
+
