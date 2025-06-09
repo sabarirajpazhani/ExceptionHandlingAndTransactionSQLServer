@@ -6,22 +6,23 @@ use ExceptionHandlingExercise;
 
 --create table
 create table Employee(
-	EmpID int identity(1,1) primary key,
+	EmpID int primary key not null,
 	EmpName varchar(80),
 	EmpEmail varchar(80),
 	EmpSalary int,
 	EmpPhone varchar(20)
 );
 
-INSERT INTO Employee (EmpName, EmpEmail, EmpSalary, EmpPhone) VALUES
-('Arun Kumar', 'arun.kumar@example.com', 45000, '9876543210'),
-('Balaji M', 'balaji.m@example.com', 52000, '8765432109'),
-('Charan R', 'charan.r@example.com', 61000, '7654321890'),
-('Deepika S', 'deepika.s@example.com', 47000, '9090909090'),
-('Ganesh K', 'ganesh.k@example.com', 58000, '9123456789');
+INSERT INTO Employee (EmpID,EmpName, EmpEmail, EmpSalary, EmpPhone) VALUES
+(1,'Arun Kumar', 'arun.kumar@example.com', 45000, '9876543210'),
+(2,'Balaji M', 'balaji.m@example.com', 52000, '8765432109'),
+(3,'Charan R', 'charan.r@example.com', 61000, '7654321890'),
+(4,'Deepika S', 'deepika.s@example.com', 47000, '9090909090'),
+(5,'Ganesh K', 'ganesh.k@example.com', 58000, '9123456789');
 
 select * from Employee;
 
+drop table Employee;
 
 /*1. Basic TRY...CATCH Block:
 Write a script that inserts a record into a table and use a TRY...CATCH block to handle any errors.*/
@@ -162,3 +163,16 @@ end catch
 commit transaction
 
 select * from Employee;
+
+/*9. Check @@ERROR (Legacy Style):
+Write a script using the legacy @@ERROR method to handle errors after each SQL statement and print error status.*/
+declare @error int
+
+insert into Employee values
+(null, 'Karthik', 'Karthik@gmail.com',86000,'9954324545')
+
+set @error = @@error
+if @error<> 0
+print 'Error occurred in the code - ' + cast(@error as varchar(90))
+else
+print 'Inserted Successfully'
