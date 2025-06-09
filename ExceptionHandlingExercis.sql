@@ -76,5 +76,19 @@ end catch
 
 select * from ErrorLog;
 
-
+/*4. Nested TRY...CATCH:
+Write a script with a nested TRY...CATCH structure where an inner error is caught and rethrown to the outer block.*/
+begin try
+	begin try
+		select 100/0
+		print 'Successfully Divided'
+	end try
+	begin catch 
+		print 'Inner Catch '+ error_message()
+		throw;
+	end catch
+end try
+begin catch
+	print 'Outter Catch '+ error_message()
+end catch
 
