@@ -92,3 +92,16 @@ begin catch
 	print 'Outter Catch '+ error_message()
 end catch
 
+/*RAISEERROR with Custom Message:
+Use RAISEERROR inside the CATCH block to throw a user-defined error with severity level 16 and log it.*/
+begin try
+	declare @nums1 int = 150, @nums2 int = 0, @Result2 int = 0
+	set @Result2 = @nums1/@nums2;
+	print 'Result - ' + cast(@Result2 as varchar(30))
+end try
+begin catch
+	insert into ErrorLog values
+	(ERROR_MESSAGE(), ERROR_LINE(), ERROR_SEVERITY())
+end catch
+
+select * from ErrorLog;
