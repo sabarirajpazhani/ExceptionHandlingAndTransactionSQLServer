@@ -248,3 +248,23 @@ begin
 end
 
 spDiviedByZero 120, 0;
+
+
+--To understand the Try-Catch implementation in SQL Server.
+create procedure spDivisorNotBeZero
+	@Number1 int,
+	@Number2 int
+as
+begin
+	declare @Result int
+	set @Result = 0
+	begin try
+		set @Result = @Number1 / @Number2
+		print 'Result - ' +cast(@Result as varchar(30))
+	end try
+	begin catch
+		print 'Divisor (Number2 ) must not be Zero'
+	end catch
+end
+
+spDivisorNotBeZero 120, 0;
