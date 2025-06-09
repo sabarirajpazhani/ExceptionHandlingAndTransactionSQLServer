@@ -201,7 +201,7 @@ end
 spAddtwoNum 100, 1;
 
 
--- Raise Error using throw statement in SQL Server.
+-- 1. Raise Error using throw statement in SQL Server.
 create procedure spDevidedBy2
 	@Number1 int,
 	@Number2 int
@@ -224,3 +224,27 @@ begin
 end
 
 spDevidedBy2 100,2
+
+-- 2. Raise Error using throw statement in SQL Server.
+create procedure spDiviedByZero
+	@Number1 int,
+	@Number2 int
+as
+begin
+	declare @Result int
+	set @Result = 0
+	begin try
+		if (@Number2 = 0)
+		throw 50001, 'Divisor must not be Zero', 1
+		set @Result = @Number1 /@Number2
+		print 'Result - ' + cast(@Result as varchar(30))
+	end try
+	begin catch 
+		print error_number()
+		print error_message()
+		print error_severity()
+		print error_state()
+	end catch
+end
+
+spDiviedByZero 120, 0;
