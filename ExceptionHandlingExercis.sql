@@ -33,3 +33,16 @@ end try
 begin catch
 	print 'Error Occurred : ' + ERROR_MESSAGE()
 end catch
+
+/*2. Handle Division by Zero:
+Create a query that divides two numbers. Use TRY...CATCH to catch a "Divide by zero" error and print a custom message.*/
+begin try
+	declare @Number1 int = 180, @Number2 int = 0
+	declare @Result int
+	set @Result = @Number1 / @Number2
+	print 'Result - ' + cast(@Result as varchar(30))
+end try
+begin catch
+	print'Divide by Zero'
+	print error_number()
+end catch
